@@ -25,9 +25,6 @@ let persons = [
         number: "1357"
     },
 ]
-/* app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
-}) */
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
@@ -50,36 +47,43 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-const generateId = () => {
-    const maxId = notes.length > 0
-        ? Math.max(...notes.map(n => n.id))
-        : 0
-    return maxId + 1
+function getRandomID(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
 }
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (!body.content) {
+    console.log(body)
+
+    if (!body.name || !body.number) {
         return response.status(400).json({
             error: 'content missing'
         })
     }
 
-    const note = {
-        content: body.content,
-        important: body.important || false,
-        id: generateId(),
+    if (persons.find(p => p.name === body.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
     }
 
-    notes = notes.concat(note)
+    const person = {
+        id: getRandomID(0, 10000),
+        name: body.name,
+        number: body.number
+    }
 
-    response.json(note)
+    persons = persons.concat(person)
+
+    response.json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    notes = notes.filter(note => note.id !== id)
+    persons = persons.filter(p => p.id !== id)
 
     response.status(204).end()
 })
