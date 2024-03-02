@@ -1,0 +1,7 @@
+https://fullstack-osa3-lo.onrender.com/api/persons
+content-type: application/json
+
+{
+    "name": "YliPekka",
+    "number": "1234567890"
+}
