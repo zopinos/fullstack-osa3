@@ -1,4 +1,4 @@
-https://fullstack-osa3-lo.onrender.com/api/persons
+POST https://fullstack-osa3-lo.onrender.com/api/persons
 content-type: application/json
 
 {
